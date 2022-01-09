@@ -1,2 +1,4 @@
 # virtualenv folder
 venv/
+variables.py
+config.py
