@@ -1,0 +1,18 @@
+FROM python:3.7-slim
+
+WORKDIR /app
+
+ADD . /app
+
+RUN apt update
+RUN apt install build-essential -y
+RUN apt-get install freetds-dev -y
+RUN pip install -r requirements.txt
+
+CMD python app.py
+
+# 1. 使用哪一個 image
+# 2. 建立工作目錄
+# 3. 複製指定的檔案 到容器中的指定位置
+# 4. 執行 pip install -r requirements.txt
+# 5. 執行 app.py

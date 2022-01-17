@@ -21,11 +21,21 @@ from models import *
 
 @app.route("/<string:exchange>/<string:symbol>")
 def symbol_price(exchange, symbol):
-    query_data = CryptoPrice.query.filter_by(exchange=exchange, symbol=symbol).order_by(CryptoPrice.create_time.desc()).first()
+    query_data = (
+        CryptoPrice.query.filter_by(exchange=exchange, symbol=symbol)
+        .order_by(CryptoPrice.create_time.desc())
+        .first()
+    )
 
-    return render_template('price.html', data={'symbol': query_data.symbol, 'price': query_data.price,
-                                               'update_time': query_data.create_time})
+    return render_template(
+        "price.html",
+        data={
+            "symbol": query_data.symbol,
+            "price": query_data.price,
+            "update_time": query_data.create_time,
+        },
+    )
 
 
 if __name__ == "__main__":
-    app.run(port=8000)
+    app.run(host="0.0.0.0", port=8000)
