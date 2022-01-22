@@ -21,3 +21,5 @@ tzdata==2021.5
 tzlocal==4.1
 urllib3==1.26.8
 Werkzeug==2.0.2
+uwsgi
+psycopg2

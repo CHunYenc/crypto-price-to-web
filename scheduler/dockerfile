@@ -10,6 +10,9 @@ RUN apt-get install freetds-dev -y
 RUN apt install libpq-dev postgresql-client postgresql-client-common -y
 RUN pip install -r requirements.txt
 
+CMD ["flask","db","init"]
+CMD ["flask","db","migrate"]
+CMD ["flask","db","upgrade"]
 CMD ["uwsgi","app.ini"]
 
 # 1. 使用哪一個 image

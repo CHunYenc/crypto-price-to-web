@@ -19,12 +19,29 @@ Migrate = Migrate(app, db)
 from models import *
 
 
+@app.route('/')
+def index():
+    return "Connect Status is OK!"
+
+@app.route('/add/<string:symbol>')
+def add_symbol():
+    with app.app_context():
+        sql = "SELECT *" \
+              "FROM focus_symbol"
+        symbol_lists = db.engine.execute(sql)
+        sql = f"INSERT INTO crypto_price (exchange, symbol, price, create_time) VALUES('Binance', '{symbol}', {data['price']},'{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}');"
+        result = db.engine.execute(sql)
+        result.close()
+        symbol_lists.close()
+    return "新增成功"
+
+
 @app.route("/<string:exchange>/<string:symbol>")
 def symbol_price(exchange, symbol):
     query_data = (
         CryptoPrice.query.filter_by(exchange=exchange, symbol=symbol)
-        .order_by(CryptoPrice.create_time.desc())
-        .first()
+            .order_by(CryptoPrice.create_time.desc())
+            .first()
     )
 
     return render_template(
