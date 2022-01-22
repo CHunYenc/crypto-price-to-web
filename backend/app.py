@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from sqlalchemy import exc
 from config import config
 
 # initialize
@@ -24,16 +25,17 @@ def index():
     return "Connect Status is OK!"
 
 @app.route('/add/<string:symbol>')
-def add_symbol():
+def add_symbol(symbol):
     with app.app_context():
-        sql = "SELECT *" \
-              "FROM focus_symbol"
-        symbol_lists = db.engine.execute(sql)
-        sql = f"INSERT INTO crypto_price (exchange, symbol, price, create_time) VALUES('Binance', '{symbol}', {data['price']},'{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}');"
-        result = db.engine.execute(sql)
-        result.close()
-        symbol_lists.close()
-    return "新增成功"
+        sql = f"INSERT INTO focus_symbol (exchange, symbol) VALUES('binance', '{symbol}');"
+        try:
+            result = db.engine.execute(sql)
+            print(result)
+        except exc.OperationalError:
+            return "資料庫連線失敗"
+        else:
+            result.close()
+    return "新增成功, 已加入排程抓取資料"
 
 
 @app.route("/<string:exchange>/<string:symbol>")

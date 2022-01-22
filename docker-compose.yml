@@ -1,6 +1,19 @@
 version: "3"
 
 services:
+  db:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pwd
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+
   nginx:
     build: ./nginx
     container_name: nginx
@@ -16,6 +29,8 @@ services:
       - 8080
     volumes:
       - ./backend:/app/backend
+    depends_on:
+      - db
 
   scheduler:
     build: ./scheduler
@@ -25,12 +40,3 @@ services:
       - 8081
     volumes:
       - ./scheduler:/app/scheduler
-
-
-  db:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: example
-    ports:
-      - "8787:5432"

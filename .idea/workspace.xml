@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cec77219-8b18-4acd-a530-7a21c7b6cc61" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/nginx/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/nginx/nginx.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.idea/backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/backend.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/backend/dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scheduler/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/scheduler/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +86,7 @@
       <updated>1641719412958</updated>
       <workItem from="1641719414036" duration="479000" />
       <workItem from="1642834235787" duration="26000" />
-      <workItem from="1642834559089" duration="5988000" />
+      <workItem from="1642834559089" duration="8035000" />
     </task>
     <servers />
   </component>
