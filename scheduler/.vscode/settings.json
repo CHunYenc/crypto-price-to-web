@@ -1,6 +1,0 @@
-{
-    "python.linting.flake8Enabled": true,
-    "python.analysis.extraPaths": [
-        "${workspaceFolder}/libraries"
-    ]
-}

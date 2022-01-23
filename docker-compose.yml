@@ -33,6 +33,8 @@ services:
       - 8081
     volumes:
       - ./scheduler:/app/scheduler
+    depends_on:
+      - db
 
   nginx:
     build: ./nginx
