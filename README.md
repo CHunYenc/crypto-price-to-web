@@ -7,6 +7,7 @@
 - [目錄](#目錄)
 - [skills](#skills)
   - [Important Files](#important-files)
+    - [How to create SECRET_KEY?](#how-to-create-secret_key)
     - [backend/config.py](#backendconfigpy)
     - [scheduler/config.py](#schedulerconfigpy)
 
@@ -17,6 +18,19 @@ finish skills: ```postgresql```、```flask```、```flask-apscheduler```
 future skills: ```nginx```、```uwsgi```、```docker```、```docker-compose```
 
 ## Important Files
+
+### How to create SECRET_KEY?
+
+```
+==== generate SECRET_KEY ====
+$ flask shell
+>>> import os
+>>> import base64
+>>> a = os.urandom(24)
+>>> base64.b64encode(a)
+```
+
+
 ### backend/config.py
 
 ```

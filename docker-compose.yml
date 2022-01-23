@@ -7,19 +7,12 @@ services:
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: pwd
+      POSTGRES_PASSWORD: example
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - ./:/var/lib/postgresql/data/
     ports:
       - "5432:5432"
-
-  nginx:
-    build: ./nginx
-    container_name: nginx
-    restart: always
-    ports:
-      - "80:80"
 
   backend:
     build: ./backend
@@ -40,3 +33,12 @@ services:
       - 8081
     volumes:
       - ./scheduler:/app/scheduler
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend

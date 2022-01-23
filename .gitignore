@@ -2,3 +2,4 @@
 venv/
 variables.py
 config.py
+pgdata/
