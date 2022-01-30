@@ -34,7 +34,7 @@ services:
       - redis
 
   scheduler:
-    build: ./backend
+    build: ./scheduler
     container_name: flask-apscheduler
     restart: always
     expose:

@@ -39,7 +39,7 @@ def get_symbol_price():
             symbol_name = str.upper(i[2])
             if exchange_name == "binance":
                 data = getBinance.get_binance_specify_symbol_price(symbol_name)
-                r.set(f"{exchange_name}_{data['symbol']}", json.dumps(data))
+                r.set(f"{exchange_name}_{symbol_name}", json.dumps(data))
         result.close()
         connection.close()
     print(f"== {datetime.now()} get_symbol_price 排程結束")
