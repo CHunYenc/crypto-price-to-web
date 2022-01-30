@@ -34,16 +34,18 @@ def index():
 def add_symbol(exchange, symbol):
     exchange = str.lower(exchange)
     symbol = str.upper(symbol)
-    with app.app_context():
-        sql = f"INSERT INTO focus_symbol (exchange, symbol) VALUES('{exchange}', '{symbol}');"
-        try:
-            result = db.engine.execute(sql)
-            print(result)
-        except exc.OperationalError:
-            return "資料庫連線失敗"
-        else:
-            result.close()
-    return "新增成功, 已加入排程抓取資料"
+    try:
+        query = FocusSymbol(exchange=exchange, symbol=symbol)
+        db.session.add(query)
+        db.session.commit()
+    except exc.IntegrityError:
+        return "新增失敗, 資料已經重複", 400
+    except exc.OperationalError:
+        return "新增失敗, 資料庫連線失敗", 400
+    except:
+        return "其他錯誤, 請找管理員", 400
+    else:
+        return "新增成功, 已加入排程抓取資料"
 
 
 @app.route("/<string:exchange>/<string:symbol>")

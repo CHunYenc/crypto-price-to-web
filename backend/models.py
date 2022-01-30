@@ -7,8 +7,7 @@ class FocusSymbol(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     exchange = db.Column(db.String(10), nullable=False, default="None")
-    symbol = db.Column(db.String(10), nullable=False)
-
+    symbol = db.Column(db.String(10), nullable=False, unique=True)
 
 # class CryptoPrice(db.Model):
 #     __tablename__ = "crypto_price"
