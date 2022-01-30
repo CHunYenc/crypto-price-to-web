@@ -3,3 +3,5 @@ venv/
 variables.py
 config.py
 pgdata/
+__pycache__/
+.idea/

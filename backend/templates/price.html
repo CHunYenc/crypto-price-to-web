@@ -5,13 +5,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ data.symbol }} - {{ data.price }}</title>
+    <title>{{ data.symbol }} - {{ data.lastPrice }}</title>
 </head>
 
 <body>
-    <p id="symbol">{{ data.symbol }}</p>
-    <p id="price">{{ data.price }}</p>
-    <p id="update_time">{{ data.update_time }}</p>
+    <p id="result">{{ data }}</p>
+
+    <dl>
+        <dt>交易對(symbol)</dt>
+        <dd id="symbol">{{ data.symbol }}</dd>
+
+        <dt>24h - 價格漲跌</dt>
+        <dd id="priceChange">{{data.priceChange}}</dd>
+
+        <dt>24h - 價格漲跌幅度</dt>
+        <dd id="priceChangePercent">{{data.priceChangePercent}}</dd>
+
+        <dt>24h - 目前價格</dt>
+        <dd>{{data.lastPrice}}</dd>
+    </dl>
 </body>
 
 </html>

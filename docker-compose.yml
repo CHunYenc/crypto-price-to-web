@@ -13,6 +13,13 @@ services:
       - ./:/var/lib/postgresql/data/
     ports:
       - "5432:5432"
+  
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
 
   backend:
     build: ./backend
@@ -24,9 +31,10 @@ services:
       - ./backend:/app/backend
     depends_on:
       - db
+      - redis
 
   scheduler:
-    build: ./scheduler
+    build: ./backend
     container_name: flask-apscheduler
     restart: always
     expose:
@@ -35,6 +43,7 @@ services:
       - ./scheduler:/app/scheduler
     depends_on:
       - db
+      - redis
 
   nginx:
     build: ./nginx

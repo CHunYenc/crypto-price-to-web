@@ -6,6 +6,8 @@ from pytz import timezone
 from config import config
 from functions import getBinance
 from datetime import datetime
+import redis
+import json
 
 # from flask_cors import CORS
 
@@ -19,30 +21,31 @@ if app.config["ENV"] == "production":
 else:
     app.config.from_object(config["dev"])
 
-db = SQLAlchemy()
-db.init_app(app)
+db = SQLAlchemy(app)
 # 切記一定要指定 timezone，反則會跳出多於訊息
 scheduler = APScheduler(scheduler=BackgroundScheduler(timezone="Asia/Taipei"))
 
+r = redis.from_url(app.config['CACHE_REDIS_URL'])
+r.ping()
+
 
 @scheduler.task("interval", id="get_symbol_price", seconds=10, max_instances=1)
-def job1():
+def get_symbol_price():
     print(f"== {datetime.now()} get_symbol_price 排程開始")
-    with app.app_context():
-        sql = "SELECT *" \
-              "FROM focus_symbol"
-        symbol_lists = db.engine.execute(sql)
-        for i in symbol_lists:
-            symbol = i[2]
-            data = getBinance.get_binance_all_symbol_price(symbol)
-            sql = f"INSERT INTO crypto_price (exchange, symbol, price, create_time) VALUES('Binance', '{symbol}', {data['price']},'{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}');"
-            result = db.engine.execute(sql)
-            result.close()
-        symbol_lists.close()
+    sql = "SELECT *" "FROM focus_symbol"
+    with db.engine.connect() as connection:
+        result = connection.execute(sql)
+        for i in result:
+            exchange_name = str.lower(i[1])
+            symbol_name = str.upper(i[2])
+            if exchange_name == "binance":
+                data = getBinance.get_binance_specify_symbol_price(symbol_name)
+                r.set(f"{exchange_name}_{data['symbol']}", json.dumps(data))
+        result.close()
     print(f"== {datetime.now()} get_symbol_price 排程結束")
 
 
 scheduler.start()
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0", port=9001)
