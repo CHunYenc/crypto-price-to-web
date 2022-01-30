@@ -26,7 +26,6 @@ db = SQLAlchemy(app)
 scheduler = APScheduler(scheduler=BackgroundScheduler(timezone="Asia/Taipei"))
 
 r = redis.from_url(app.config['CACHE_REDIS_URL'])
-r.ping()
 
 
 @scheduler.task("interval", id="get_symbol_price", seconds=10, max_instances=1)
@@ -42,6 +41,7 @@ def get_symbol_price():
                 data = getBinance.get_binance_specify_symbol_price(symbol_name)
                 r.set(f"{exchange_name}_{data['symbol']}", json.dumps(data))
         result.close()
+        connection.close()
     print(f"== {datetime.now()} get_symbol_price 排程結束")
 
 

@@ -22,8 +22,6 @@ Migrate = Migrate(app, db)
 from models import *
 
 r = redis.from_url(app.config['CACHE_REDIS_URL'])
-r.ping()
-
 
 @app.route("/")
 def index():
@@ -34,25 +32,27 @@ def index():
 def add_symbol(exchange, symbol):
     exchange = str.lower(exchange)
     symbol = str.upper(symbol)
+    query = FocusSymbol(exchange=exchange, symbol=symbol)
+    db.session.add(query)
     try:
-        query = FocusSymbol(exchange=exchange, symbol=symbol)
-        db.session.add(query)
         db.session.commit()
-    except exc.IntegrityError:
-        return "新增失敗, 資料已經重複", 400
-    except exc.OperationalError:
-        return "新增失敗, 資料庫連線失敗", 400
     except:
-        return "其他錯誤, 請找管理員", 400
+        db.session.rollback()
+        return "新增失敗, 資料庫連線失敗", 400
     else:
-        return "新增成功, 已加入排程抓取資料"
+        return "新增成功", 200
+    finally:
+        db.session.close()
+
 
 
 @app.route("/<string:exchange>/<string:symbol>")
 def symbol_price(exchange, symbol):
     exchange_name = str.lower(exchange)
     symbol_name = str.upper(symbol)
-    result = json.loads(r.get(f'{exchange_name}_{symbol_name}'))
+    data = r.get(f'{exchange_name}_{symbol_name}')
+    print(data)
+    result = json.loads(data)
 
     # result =
     # {'symbol': 'BTCUSDT', 'priceChange': '68.35000000', 'priceChangePercent': '0.181',
