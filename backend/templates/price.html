@@ -29,11 +29,7 @@
         <dd id="priceChangePercent">{{ data.priceChangePercent }}</dd>
 
         <dt>24h - 目前價格</dt>
-<<<<<<< HEAD
-        <dd id="lastPrice">{{data.lastPrice}}</dd>
-=======
-        <dd>{{ data.lastPrice }}</dd>
->>>>>>> develop
+        <dd id="lastPrice">{{ data.lastPrice }}</dd>
     </dl>
     {# Crypto.com #}
 {% else %}
@@ -48,7 +44,7 @@
         <dd id="priceChangePercent">{{ ((data.result.data.a - (data.result.data.c|abs + data.result.data.a)) / (data.result.data.c|abs + data.result.data.a) * 100)|round(2, 'floor') }}</dd>
 
         <dt>24h - 目前價格</dt>
-        <dd>{{ data.result.data.a }}</dd>
+        <dd id="lastPrice">{{ data.result.data.a }}</dd>
     </dl>
 {% endif %}
 
