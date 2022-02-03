@@ -5,25 +5,53 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ data.symbol }} - {{ data.lastPrice }}</title>
+    {% if 'result' not in data %}
+        <title>{{ data.symbol }} - {{ data.lastPrice }}</title>
+    {% else %}
+        <title>{{ data.result.instrument_name }} - {{ data.result.data.a }}</title>
+    {% endif %}
+
+
 </head>
 
 <body>
-    <p id="result">{{ data }}</p>
-
+<p id="result">{{ data }}</p>
+{# Binance #}
+{% if 'result' not in data %}
     <dl>
         <dt>交易對(symbol)</dt>
         <dd id="symbol">{{ data.symbol }}</dd>
 
         <dt>24h - 價格漲跌</dt>
-        <dd id="priceChange">{{data.priceChange}}</dd>
+        <dd id="priceChange">{{ data.priceChange }}</dd>
 
         <dt>24h - 價格漲跌幅度</dt>
-        <dd id="priceChangePercent">{{data.priceChangePercent}}</dd>
+        <dd id="priceChangePercent">{{ data.priceChangePercent }}</dd>
 
         <dt>24h - 目前價格</dt>
+<<<<<<< HEAD
         <dd id="lastPrice">{{data.lastPrice}}</dd>
+=======
+        <dd>{{ data.lastPrice }}</dd>
+>>>>>>> develop
     </dl>
+    {# Crypto.com #}
+{% else %}
+    <dl>
+        <dt>交易對(symbol)</dt>
+        <dd id="symbol">{{ data.result.instrument_name }}</dd>
+
+        <dt>24h - 價格漲跌</dt>
+        <dd id="priceChange">{{ data.result.data.c }}</dd>
+
+        <dt>24h - 價格漲跌幅度</dt>
+        <dd id="priceChangePercent">{{ ((data.result.data.a - (data.result.data.c|abs + data.result.data.a)) / (data.result.data.c|abs + data.result.data.a) * 100)|round(2, 'floor') }}</dd>
+
+        <dt>24h - 目前價格</dt>
+        <dd>{{ data.result.data.a }}</dd>
+    </dl>
+{% endif %}
+
 </body>
 
 </html>

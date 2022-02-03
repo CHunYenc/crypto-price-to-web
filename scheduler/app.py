@@ -4,7 +4,7 @@ from flask_apscheduler import APScheduler
 from flask_sqlalchemy import SQLAlchemy
 from pytz import timezone
 from config import config
-from functions import getBinance
+from functions import getBinance, getCrypto
 from datetime import datetime
 import redis
 import json
@@ -36,10 +36,29 @@ def get_symbol_price():
         result = connection.execute(sql)
         for i in result:
             exchange_name = str.lower(i[1])
-            symbol_name = str.upper(i[2])
-            if exchange_name == "binance":
-                data = getBinance.get_binance_specify_symbol_price(symbol_name)
-                r.set(f"{exchange_name}_{symbol_name}", json.dumps(data))
+            symbol_A = str.upper(i[2])
+            symbol_B = str.upper(i[3])
+            if exchange_name == "BINANCE".lower():
+                data = getBinance.get_binance_specify_symbol_price(f'{symbol_A}{symbol_B}')
+                # print(data)
+                if "code" in data:
+                    # print(f"binance isn't [], {data}")
+                    sql = f"DELETE FROM focus_symbol WHERE id={i[0]};"
+                    detail_result = connection.execute(sql)
+                    detail_result.close()
+                else:
+                    # print(f"binance is [], {data}")
+                    r.set(f"{exchange_name}_{symbol_A}/{symbol_B}", json.dumps(data))
+            elif exchange_name == "CRYPTO".lower():
+                data = getCrypto.get_crypto_specify_symbol_price(f'{symbol_A}_{symbol_B}')
+                if data["result"]["data"] is not []:
+                    # print(f"crypto.com isn't [], {data}")
+                    r.set(f"{exchange_name}_{symbol_A}/{symbol_B}", json.dumps(data))
+                else:
+                    # print(f"crypto.com is [], {data}")
+                    sql = f"DELETE FROM focus_symbol WHERE id={i[0]};"
+                    detail_result = connection.execute(sql)
+                    detail_result.close()
         result.close()
         connection.close()
     print(f"== {datetime.now()} get_symbol_price 排程結束")
