@@ -8,14 +8,19 @@
 - [skills](#skills)
   - [Important Files](#important-files)
     - [How to create SECRET_KEY?](#how-to-create-secret_key)
-    - [backend/config.py](#backendconfigpy)
-    - [scheduler/config.py](#schedulerconfigpy)
+    - [backend/config.py and scheduler/config.py](#backendconfigpy-and-schedulerconfigpy)
 
 # skills
 
-finish skills: ```postgresql```、```flask```、```flask-apscheduler```
-
-future skills: ```nginx```、```uwsgi```、```docker```、```docker-compose```
+- Docker (Use Docker Services)
+  - Docker-Compose
+  - Redis
+  - PostgreSQL
+  - Nginx
+- Flask (backend)
+- Flask jinja2 (backend's html)
+- Flask-apscheduler (scheduler)
+- Uwsgi
 
 ## Important Files
 
@@ -31,44 +36,28 @@ $ flask shell
 ```
 
 
-### backend/config.py
+### backend/config.py and scheduler/config.py
 
 ```
 class Config:
     SECRET_KEY = "this is your secret_key"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+
 class developmentConfig(Config):
+    SCHEDULER_API_ENABLED = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:postgres@localhost:port/dbname"
+    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:isyourpassword@host:port/postgres"
+    CACHE_REDIS_URL = "redis://localhost:6379"
+
 
 
 class productionConfig(Config):
+    SCHEDULER_API_ENABLED = False
     DEBUG = False
+    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:isyourpassword@host:port/postgres"
+    CACHE_REDIS_URL = "redis://redis"
 
 
 config = {"dev": developmentConfig, "pro": productionConfig}
-
-```
-
-### scheduler/config.py
-
-```
-class Config:
-    SECRET_KEY = "this is your secret_key"   
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-
-class development(Config):
-    SCHEDULER_API_ENABLED = True
-    DEBUG = True
-    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:postgres@localhost:port/dbname"
-
-
-class production(Config):
-    SCHEDULER_API_ENABLED = False
-    DEBUG = False
-
-
-config = {"dev": development, "pro": production}
-
 ```
