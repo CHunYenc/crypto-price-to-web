@@ -23,16 +23,18 @@ from models import *
 
 r = redis.from_url(app.config['CACHE_REDIS_URL'])
 
+
 @app.route("/")
 def index():
     return "Connect Status is OK!"
 
 
-@app.route("/add/<string:exchange>/<string:symbol>")
-def add_symbol(exchange, symbol):
+@app.route("/add/<string:exchange>/<string:symbol_A>/<string:symbol_B>")
+def add_symbol(exchange, symbol_A, symbol_B):
     exchange = str.lower(exchange)
-    symbol = str.upper(symbol)
-    query = FocusSymbol(exchange=exchange, symbol=symbol)
+    symbol_A = str.upper(symbol_A)
+    symbol_B = str.upper(symbol_B)
+    query = FocusSymbol(exchange=exchange, symbol_A=symbol_A, symbol_B=symbol_B)
     db.session.add(query)
     try:
         db.session.commit()
@@ -45,11 +47,10 @@ def add_symbol(exchange, symbol):
         db.session.close()
 
 
-
-@app.route("/<string:exchange>/<string:symbol>")
-def symbol_price(exchange, symbol):
+@app.route("/<string:exchange>/<string:symbol_A>/<string:symbol_B>")
+def symbol_price(exchange, symbol_A, symbol_B):
     exchange_name = str.lower(exchange)
-    symbol_name = str.upper(symbol)
+    symbol_name = f"{str.upper(symbol_A)}/{str.upper(symbol_B)}"
     data = r.get(f'{exchange_name}_{symbol_name}')
     print(data)
     result = json.loads(data)
