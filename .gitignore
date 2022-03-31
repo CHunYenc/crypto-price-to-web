@@ -5,3 +5,8 @@ config.py
 pgdata/
 __pycache__/
 .idea/
+
+# Online
+**.log.**
+**.log
+**.pid
