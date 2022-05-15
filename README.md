@@ -8,18 +8,19 @@
 - [skills](#skills)
   - [Important Files](#important-files)
     - [How to create SECRET_KEY?](#how-to-create-secret_key)
-    - [backend/config.py and scheduler/config.py](#backendconfigpy-and-schedulerconfigpy)
+    - [backend/app/config.py](#backendappconfigpy)
 
 # skills
 
 - Docker (Use Docker Services)
   - Docker-Compose
   - Redis
-  - PostgreSQL
+  - PostgreSQL ```not in v2(tag)```
   - Nginx
 - Flask (backend)
 - Flask jinja2 (backend's html)
-- Flask-apscheduler (scheduler)
+- Flask-apscheduler (scheduler) ```not in v2(tag)```
+- Celery ```start in v2(tag)```
 - Uwsgi
 
 ## Important Files
@@ -36,28 +37,25 @@ $ flask shell
 ```
 
 
-### backend/config.py and scheduler/config.py
+### backend/app/config.py 
 
 ```
 class Config:
-    SECRET_KEY = "this is your secret_key"
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-
+    SECRET_KEY = "PLEASE CREATE YOUR SECRET_KEY"
 
 class developmentConfig(Config):
-    SCHEDULER_API_ENABLED = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:isyourpassword@host:port/postgres"
     CACHE_REDIS_URL = "redis://localhost:6379"
-
+    CELERY_BROKER_URL = 'redis://localhost:6379'
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 
 
 class productionConfig(Config):
-    SCHEDULER_API_ENABLED = False
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:isyourpassword@host:port/postgres"
     CACHE_REDIS_URL = "redis://redis"
+    CELERY_BROKER_URL = 'redis://redis'
+    CELERY_RESULT_BACKEND = 'redis://redis'
 
+config = {"development": developmentConfig, "production": productionConfig}
 
-config = {"dev": developmentConfig, "pro": productionConfig}
 ```

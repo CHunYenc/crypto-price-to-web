@@ -4,13 +4,18 @@ COPY . /app
 
 WORKDIR /app
 
-RUN apt update
-RUN apt install build-essential -y
-RUN apt-get install freetds-dev -y
-RUN apt install libpq-dev postgresql-client postgresql-client-common -y
-RUN pip install -r requirements.txt
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    build-essential \
+    freetds-dev \
+    libpq-dev \
+    postgresql-client \
+    postgresql-client-common
 
-CMD ["uwsgi","app.ini"]
+RUN pip install --no-cache-dir -r requirements.txt
+
+CMD ["uwsgi", "app.ini"]
+# CMD ["sh","run.sh"]
 
 # 1. 使用哪一個 image
 # 2. 建立工作目錄

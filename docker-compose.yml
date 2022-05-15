@@ -1,53 +1,62 @@
 version: "3"
 
 services:
-  db:
-    image: postgres:latest
-    container_name: postgres
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: example
-      PGDATA: /var/lib/postgresql/data/pgdata
-    volumes:
-      - ./:/var/lib/postgresql/data/
-    ports:
-      - "5432:5432"
+  # db:
+  #   image: postgres:latest
+  #   container_name: postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: example
+  #     PGDATA: /var/lib/postgresql/data/pgdata
+  #   volumes:
+  #     - ./:/var/lib/postgresql/data/
+  #   ports:
+  #     - "5432:5432"
   
   redis:
     image: redis
-    container_name: redis
+    container_name: crypto-schedule-redis
     restart: always
     ports:
       - "6379:6379"
 
   backend:
     build: ./backend
-    container_name: flask-backend
+    container_name: crypto-schedule-backend
     restart: always
     expose:
       - 8080
+    # ports:
+    #   - "8080:8080"
     volumes:
       - ./backend:/app
+      - ./logs:/app/logs
     depends_on:
-      - db
+      # - db
       - redis
 
-  scheduler:
-    build: ./scheduler
-    container_name: flask-apscheduler
-    restart: always
-    expose:
-      - 8081
-    volumes:
-      - ./scheduler:/app
-    depends_on:
-      - db
-      - redis
+  # scheduler:
+  #   build: ./scheduler
+  #   container_name: flask-apscheduler
+  #   restart: always
+  #   expose:
+  #     - 8081
+  #   volumes:
+  #     - ./scheduler:/app
+  #   depends_on:
+  #     - db
+  #     - redis
+
+  worker:
+    build: ./backend
+    command: celery -A celery_worker.celery worker --loglevel=info -B
+    links:
+        - redis
 
   nginx:
     image: nginx
-    container_name: nginx
+    container_name: crypto-schedule-nginx
     restart: always
     ports:
       - "80:80"

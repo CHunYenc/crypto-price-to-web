@@ -4,7 +4,7 @@ variables.py
 config.py
 pgdata/
 __pycache__/
-.idea/
+celerybeat-schedule
 
 # Online
 **.log.**
