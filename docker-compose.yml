@@ -15,11 +15,11 @@ services:
   #     - "5432:5432"
   
   redis:
-    image: redis
+    build: ./conf
     container_name: crypto-schedule-redis
     restart: always
-    ports:
-      - "6379:6379"
+    expose:
+      - 6379
 
   backend:
     build: ./backend
@@ -51,6 +51,9 @@ services:
   worker:
     build: ./backend
     command: celery -A celery_worker.celery worker --loglevel=info -B
+    volumes:
+      - ./backend:/app
+      - ./logs/celery/:/app/logs/
     links:
         - redis
 
