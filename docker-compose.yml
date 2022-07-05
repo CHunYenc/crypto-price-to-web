@@ -1,19 +1,6 @@
 version: "3"
 
 services:
-  # db:
-  #   image: postgres:latest
-  #   container_name: postgres
-  #   restart: always
-  #   environment:
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: example
-  #     PGDATA: /var/lib/postgresql/data/pgdata
-  #   volumes:
-  #     - ./:/var/lib/postgresql/data/
-  #   ports:
-  #     - "5432:5432"
-  
   redis:
     build: ./conf
     container_name: crypto-schedule-redis
@@ -27,26 +14,11 @@ services:
     restart: always
     expose:
       - 8080
-    # ports:
-    #   - "8080:8080"
     volumes:
       - ./backend:/app
       - ./logs:/app/logs
     depends_on:
-      # - db
       - redis
-
-  # scheduler:
-  #   build: ./scheduler
-  #   container_name: flask-apscheduler
-  #   restart: always
-  #   expose:
-  #     - 8081
-  #   volumes:
-  #     - ./scheduler:/app
-  #   depends_on:
-  #     - db
-  #     - redis
 
   worker:
     build: ./backend

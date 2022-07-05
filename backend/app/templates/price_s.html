@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  </head>
+  <body>
+    <div id="app">
+      <template>
+        <el-select v-model="select_exchange" placeholder="請選擇交易所" @change="select_exchange_method">
+          <el-option
+            v-for="item in select_exchange_items"
+            :key="item"
+            :label="item"
+            :value="item"
+            :loading="select_exchange_loading">
+          </el-option>
+        </el-select>
+        <el-select v-model="select_symbol" filterable placeholder="請選擇交易對" @change="select_exchange_method">
+          <el-option
+            v-for="item in select_symbol_items"
+            :key="item"
+            :label="item"
+            :value="item"
+            :loading="select_symbol_loading">
+          </el-option>
+        </el-select>
+      </template>
+      </v-app>
+    </div>
+    <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+    crossorigin="anonymous"
+  ></script>
+  <!-- import Vue before Element -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+  <!-- import JavaScript -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="{{ url_for('static', filename='price_s.js') }}    "></script>
+  </body>
+</html>
