@@ -17,12 +17,12 @@ def index():
 
 @simple_page.route("/<string:exchange>/<string:symbol_A>/<string:symbol_B>")
 def symbol_price(exchange, symbol_A, symbol_B):
-    redis_key = f"{str.upper(exchange)}_{str.upper(symbol_A)}/{str.upper(symbol_B)}"
-    data = r.get(f'{redis_key}')
+    exchange = str.upper(f"CRYPTO_{exchange}")
+    data = r.get(f'{exchange}')
     result = json.loads(data)
     return render_template(
         "price.html",
-        data=result
+        data=result[f'{symbol_A}/{symbol_B}']
     )
 
 
