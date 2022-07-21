@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, current_app
 # from app.models import *
 from flask_socketio import emit
 
-from app import redis as r, socketio  # , db
+from app import redis as r  # , db
 
 simple_page = Blueprint('', __name__,
                         template_folder='templates')
@@ -18,6 +18,8 @@ def index():
 @simple_page.route("/<string:exchange>/<string:symbol_A>/<string:symbol_B>")
 def symbol_price(exchange, symbol_A, symbol_B):
     exchange = str.upper(f"CRYPTO_{exchange}")
+    symbol_A = str.upper(symbol_A)
+    symbol_B = str.upper(symbol_B)
     data = r.get(f'{exchange}')
     result = json.loads(data)
     return render_template(
