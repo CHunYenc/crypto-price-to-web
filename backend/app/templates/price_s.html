@@ -8,24 +8,35 @@
   <body>
     <div id="app">
       <template>
-        <el-select v-model="select_exchange" placeholder="請選擇交易所" @change="select_exchange_method">
-          <el-option
-            v-for="item in select_exchange_items"
-            :key="item"
-            :label="item"
-            :value="item"
-            :loading="select_exchange_loading">
-          </el-option>
-        </el-select>
-        <el-select v-model="select_symbol" filterable placeholder="請選擇交易對" @change="select_exchange_method">
-          <el-option
-            v-for="item in select_symbol_items"
-            :key="item"
-            :label="item"
-            :value="item"
-            :loading="select_symbol_loading">
-          </el-option>
-        </el-select>
+        <el-row>
+          <el-col :span="12">
+            <el-select v-model="select_exchange" placeholder="請選擇交易所" @change="select_exchange_method"
+            :disabled="select_exchange_disabled">
+              <el-option
+                v-for="item in select_exchange_items"
+                :key="item"
+                :label="item"
+                :value="item"
+                >
+              </el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="12">
+            <el-select v-model="select_symbol" filterable placeholder="請選擇交易對" @change="select_exchange_method"
+            :disabled="select_symbol_disabled" @input="select_data">
+              <el-option
+                v-for="item in select_symbol_items"
+                :key="item"
+                :label="item"
+                :value="item"
+                >
+              </el-option>
+            </el-select>
+          </el-col>
+        </el-row>
+        <el-row>
+          [[symbol_data]]
+        </el-row>
       </template>
       </v-app>
     </div>

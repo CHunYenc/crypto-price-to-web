@@ -26,7 +26,7 @@ def make_celery(app):
 
 
 app = Flask(__name__)
-socketio = SocketIO(app, cross_origin='http://localhost:5000')
+socketio = SocketIO(app, cross_origin='*')
 
 # setting logging
 handler = logging.FileHandler('logs/app.log', encoding='UTF-8')

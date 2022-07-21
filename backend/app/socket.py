@@ -9,7 +9,7 @@ class MyCryptoPriceNamespace(Namespace):
     def on_connect(self):
         app.logger.info('connect.')
         exchange_list = r.keys('CRYPTO_*')
-        print(exchange_list)
+        app.logger.info(exchange_list)
         emit("get_exchange", exchange_list)
 
     def on_disconnect(self):
@@ -22,3 +22,11 @@ class MyCryptoPriceNamespace(Namespace):
         for i in symbol_list:
             result.append(i)
         emit("get_symbol", result)
+
+    def on_get_symbol_data(self, data):
+        print(data)
+        exchange = str.upper(f"{data['exchange']}")
+        queryset = r.get(f'{exchange}')
+        result = json.loads(queryset)
+        print(result)
+        emit("get_symbol_data", result[data['symbol']])
