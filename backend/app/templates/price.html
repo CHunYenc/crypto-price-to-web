@@ -1,51 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% if 'lastPrice' in data.info %}
-        <title>{{ data.symbol }} - {{ data.info.lastPrice }}</title>
+    <title>{{ data.symbol }} - {{ data.info.lastPrice }}</title>
     {% else %}
-        <title>{{ data.symbol }} - {{ data.info.a }}</title>
+    <title>{{ data.symbol }} - {{ data.info.a }}</title>
     {% endif %}
+  </head>
 
+  <body>
+    {# if true: Binance else: Cryptocom #}
+    <dl>
+      <dt>交易對(symbol)</dt>
+      <dd id="symbol">{{ data.symbol }}</dd>
 
-</head>
+      <dt>24h - 價格漲跌</dt>
+      {% if 'c' not in data.info %}
+      <dd id="priceChange">{{ data.info.priceChange }}</dd>
+      {% else %}
+      <dd id="priceChange">{{ data.info.c }}</dd>
+      {% endif%}
 
-<body>
-{#
-    if true: Binance
-    else: Cryptocom
-#}
-<dl>
-    <dt>交易對(symbol)</dt>
-    <dd id="symbol">{{ data.symbol }}</dd>
+      <dt>24h - 價格漲跌幅度</dt>
+      {% if data.percentage != None %}
+      <dd id="priceChangePercent">{{ data.percentage }}</dd>
+      {% else %}
+      <dd id="priceChangePercent">
+        {{ ((data.info.a|float - (data.info.c|float|abs + data.info.a|float)) /
+        (data.info.c|float|abs + data.info.a|float) * 100)|round(2, 'floor') }}
+      </dd>
+      {% endif %}
 
-    <dt>24h - 價格漲跌</dt>
-    {% if 'c' not in data.info %}
-    <dd id="priceChange">{{ data.info.priceChange }}</dd>
-    {% else %}
-    <dd id="priceChange">{{ data.info.c }}</dd>
-    {% endif%}
-
-
-    <dt>24h - 價格漲跌幅度</dt>
-    {% if data.percentage != None %}
-        <dd id="priceChangePercent">{{ data.percentage }}</dd>
-    {% else %}
-        <dd id="priceChangePercent">{{ ((data.info.a|float - (data.info.c|float|abs + data.info.a|float)) / (data.info.c|float|abs + data.info.a|float) * 100)|round(2, 'floor') }}</dd>
-    {% endif %}
-
-    <dt>24h - 目前價格</dt>
-    {% if 'lastPrice' in data.info %}
-        <dd id="lastPrice">{{ data.info.lastPrice }}</dd>
-    {% else %}
-        <dd id="lastPrice">{{ data.info.a }}</dd>
-    {% endif %}
-</dl>
-<p id="result">{{ data }}</p>
-</body>
-
+      <dt>24h - 目前價格</dt>
+      {% if 'lastPrice' in data.info %}
+      <dd id="lastPrice">{{ data.info.lastPrice }}</dd>
+      {% else %}
+      <dd id="lastPrice">{{ data.info.a }}</dd>
+      {% endif %}
+    </dl>
+    <p id="result">{{ data }}</p>
+  </body>
 </html>
