@@ -1,18 +1,17 @@
 import logging
-
 from flask import Flask
-from flask_cors import CORS, cross_origin
 from flask_socketio import SocketIO
 
 from app.config import config
 from celery import Celery
 from redis import Redis
 
+import eventlet
+eventlet.monkey_patch()
+
 celery = Celery(__name__)
 redis = Redis()
 socketio = SocketIO()
-cors = CORS()
-
 
 def make_celery(app):
     celery = Celery(app.import_name)
@@ -61,5 +60,5 @@ def create_app(env='development'):
 
     socketio.on_namespace(MyCryptoPriceNamespace('/ws'))
     # socket_io
-    socketio.init_app(app, cors_allowed_origins='*')
+    socketio.init_app(app, cors_allowed_origins='*', message_queue='redis://', async_mode='eventlet')
     return app
