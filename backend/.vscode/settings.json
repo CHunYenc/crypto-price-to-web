@@ -1,0 +1,29 @@
+{
+  "editor.formatOnSave": true,
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.suggest.insertMode": "replace",
+    "gitlens.codeLens.scopes": ["document"]
+  },
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features",
+    "editor.suggest.insertMode": "replace",
+    "gitlens.codeLens.scopes": ["document"]
+  },
+  "[javascript]": {
+    "editor.maxTokenizationLineLength": 2500,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python",
+    "gitlens.codeLens.symbolScopes": ["!Module"],
+    "editor.wordBasedSuggestions": false
+  },
+  "prettier.trailingComma": "none",
+  "prettier.tabWidth": 2,
+  "prettier.semi": false,
+  "prettier.singleQuote": true
+}
