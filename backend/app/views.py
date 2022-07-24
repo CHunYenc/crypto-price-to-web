@@ -1,13 +1,14 @@
 import json
 
 from flask import Blueprint, render_template, current_app
-# from app.models import *
-from flask_socketio import emit
+from flask import current_app as app
 
-from app import redis as r  # , db
+from app.extensions import make_redis
 
 simple_page = Blueprint('', __name__,
                         template_folder='templates')
+
+r = make_redis(app)
 
 
 @simple_page.route("/")

@@ -1,22 +1,23 @@
 import json
-from os import symlink
 import time
 
-from flask_socketio import Namespace, emit, send
-from flask import current_app
-from app import redis as r
+from flask_socketio import Namespace, emit
+from flask import current_app as app
+from app.extensions import make_redis
+
+r = make_redis(app)
 
 
 class MyCryptoPriceNamespace(Namespace):
     def on_connect(self):
-        current_app.logger.info('connect.')
+        app.logger.info('connect.')
         exchange_list = r.keys('CRYPTO_*')
-        current_app.logger.info(exchange_list)
+        app.logger.info(exchange_list)
         emit("get_exchange", [x.decode() for x in exchange_list])
         self.status = False
 
     def on_disconnect(self):
-        current_app.logger.info('disconnect.')
+        app.logger.info('disconnect.')
         self.status = False
 
     def on_get_symbol(self, data):
@@ -35,5 +36,4 @@ class MyCryptoPriceNamespace(Namespace):
             queryset = r.get(f'{self.exchange}')
             result = json.loads(queryset)
             emit("get_symbol_data", result[self.symbol])
-            time.sleep(2)
-
+            time.sleep(6)
