@@ -1,0 +1,16 @@
+# virtualenv folder
+venv/
+variables.py
+config.py
+pgdata/
+__pycache__/
+celerybeat-schedule
+.idea/
+secets.txt
+.vscode/
+
+# Online
+**.log.**
+**.log
+**.pid
+.env

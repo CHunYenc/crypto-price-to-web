@@ -1,0 +1,12 @@
+{% extends "base/layout.html" %} {% block title %} {% endblock title %} {% block
+content %}
+  <div id="index">
+    <el-main>
+      目前執行環境：{{ data.env }} <br />
+      Connect Status is OK!
+    </el-main>
+  </div>
+
+{% endblock content %} {% block js %}
+  <script src="{{ url_for('static', filename='index.js') }}"></script>
+{% endblock js %}

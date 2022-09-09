@@ -1,0 +1,21 @@
+<el-menu
+  :default-active="activeIndex"
+  class="el-menu-demo"
+  mode="horizontal"
+  @select="handleSelect"
+  background-color="#545c64"
+  text-color="#fff"
+  active-text-color="#ffd04b"
+>
+  <!-- menu items -->
+  <el-menu-item
+    v-for="(item, index) in path_list"
+    :key="index"
+    :disabled="item.disable"
+    :index="item.index"
+  >
+    <a :href="item.href" :class="{disabled:item.disable}">
+      [[item.name]]
+    </a>
+  </el-menu-item>
+</el-menu>

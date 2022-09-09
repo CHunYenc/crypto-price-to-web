@@ -1,0 +1,5 @@
+[run]
+omit =
+    */config.py
+    */extensions.py
+    tests/*

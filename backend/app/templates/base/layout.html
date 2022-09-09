@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- import ElementUI css -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"
+  />
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='layout.css') }}"
+  />
+  <title>{% block title %} {% endblock title %}</title>
+  {% block style %} {% endblock %}
+</head>
+<body>
+<div id="header">
+  <el-header> {% include 'base/header.html' %} </el-header>
+</div>
+<div id="content">{% block content %} {% endblock content %}</div>
+<!-- import Vue before Element -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+<!-- import ElementUI js -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="{{ url_for('static', filename='layout.js') }}"></script>
+{% block js %} {% endblock js %}
+</body>
+</html>

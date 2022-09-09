@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    {% if data.exchange == 'BINANCE' %}
+      {{ data.data.symbol }} - {{ data.data.info.lastPrice }}
+    {% elif data.exchange == "CRYPTOCOM" %}
+      {{ data.data.symbol }} - {{ data.data.info.a }}
+    {% else %}
+      ERROR
+    {% endif %}
+  </title>
+</head>
+
+<body>
+{# if true: Binance else: Cryptocom #}
+<dl>
+  <dt>交易對(symbol)</dt>
+  <dd id="symbol">{{ data.data.symbol }}</dd>
+  <dt>24h - 價格漲跌</dt>
+  <dd id="priceChange">
+    {% if data.exchange == 'BINANCE' %}
+      {{ data.data.info.priceChange }}
+    {% elif data.exchange == "CRYPTOCOM" %}
+      {{ data.data.info.c }}
+    {% else %}
+      ERROR
+    {% endif %}
+  </dd>
+
+  <dt>24h - 價格漲跌幅度</dt>
+  <dd id="priceChangePercent">
+    {% if data.exchange == 'BINANCE' %}
+      {{ data.data.percentage }}
+    {% elif data.exchange == "CRYPTOCOM" %}
+      {{ ((data.data.info.a|float - (data.data.info.c|float|abs + data.data.info.a|float)) /
+        (data.data.info.c|float|abs + data.data.info.a|float) * 100)|round(2, 'floor') }}
+    {% else %}
+      ERROR
+    {% endif %}
+  </dd>
+
+  <dt>24h - 目前價格</dt>
+  <dd id="lastPrice">
+    {% if data.exchange == 'BINANCE' %}
+      {{ data.data.info.lastPrice }}
+    {% elif data.exchange == "CRYPTOCOM" %}
+      {{ data.data.info.a }}
+    {% else %}
+      ERROR
+    {% endif %}
+  </dd>
+</dl>
+<p id="result">{{ data }}</p>
+</body>
+</html>

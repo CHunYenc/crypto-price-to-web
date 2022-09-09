@@ -1,0 +1,24 @@
+body {
+    margin: 0;
+}
+
+#app {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.el-header {
+    padding: 0;
+}
+
+.el-menu-item a {
+    display: block;
+    text-decoration: none;
+}
+
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+}
