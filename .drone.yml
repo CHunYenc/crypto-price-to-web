@@ -41,4 +41,3 @@ steps:
 
 depends_on:
   - ready
-  - production
