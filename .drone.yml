@@ -26,6 +26,3 @@ steps:
       - sudo docker compose rm -f
       - sudo docker image prune -a
       - sudo docker compose up -d
-
-depends_on:
-  - ready
