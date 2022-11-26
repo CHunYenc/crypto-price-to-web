@@ -10,10 +10,16 @@ server:
   ssh_key:
     from_secret: key
 
+
+
 steps:
   - name: setup
     commands:
-      - echo "HelloWorld!"
+      - sudo su
+      - python3 -m venv .env
+      - source .env/bin/activate
+      - pip install -U pip
+      - pip install -r requirements.txt
 
 
 # steps:
