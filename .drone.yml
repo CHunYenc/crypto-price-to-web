@@ -1,40 +1,54 @@
 kind: pipeline
-type: docker
+type: ssh
 name: default
+
+server:
+  host:
+    from_secret: host
+  user:
+    from_secret: username
+  ssh_key:
+    from_secret: key
 
 steps:
   - name: setup
-    image: python:3.7-slim
     commands:
-      - pip install --upgrade pip
-      - pip install -r backend/requirements.txt
+      - echo "HelloWorld!"
 
-  - name: ssh
-    image: appleboy/drone-ssh
-    environment:
-      PLUGIN_ENVS: SECRET_KEY, REDIS_HOST, REDIS_PORT
-      SECRET_KEY:
-        from_secret: SECRET_KEY
-      REDIS_HOST:
-        from_secret: REDIS_HOST
-      REDIS_PORT:
-        from_secret: REDIS_PORT
-    settings:
-      host:
-        from_secret: ssh_host
-      username:
-        from_secret: ssh_username
-      password:
-        from_secret: ssh_password
-      port:
-        from_secret: ssh_port
-      command_timeout: 10m
-      script:
-        - rm -rf application
-        - git clone https://github.com/CHunYenc/crypto-price-scheduler.git application
-        - cd application
-        - echo SECRET_KEY = $${SECRET_KEY} > backend/.env
-        - echo REDIS_HOST = $${REDIS_HOST} >> backend/.env
-        - echo REDIS_PORT = $${REDIS_PORT} >> backend/.env
-        - docker system prune -af
-        - docker compose up -d --remove-orphans
+
+# steps:
+#   - name: setup
+#     image: python:3.7-slim
+#     commands:
+#       - pip install --upgrade pip
+#       - pip install -r backend/requirements.txt
+
+#   - name: ssh
+#     image: appleboy/drone-ssh
+#     # environment:
+#     #   PLUGIN_ENVS: SECRET_KEY, REDIS_HOST, REDIS_PORT
+#     #   SECRET_KEY:
+#     #     from_secret: SECRET_KEY
+#     #   REDIS_HOST:
+#     #     from_secret: REDIS_HOST
+#     #   REDIS_PORT:
+#     #     from_secret: REDIS_PORT
+#     settings:
+#       host:
+#         from_secret: ssh_host
+#       username:
+#         from_secret: ssh_username
+#       key:
+#         from_secret: ssh_key
+#       command_timeout: 10m
+#       script:
+#         - echo "HelloWorld!"
+#         # - rm -rf application
+#         # - git clone https://github.com/CHunYenc/crypto-price-scheduler.git application
+#         # - cd application
+#         # - echo SECRET_KEY = $${SECRET_KEY} > backend/.env
+#         # - echo REDIS_HOST = $${REDIS_HOST} >> backend/.env
+#         # - echo REDIS_PORT = $${REDIS_PORT} >> backend/.env
+#         # - docker compose rm -f
+#         # - docker image prune -a
+#         # - docker compose up -d
