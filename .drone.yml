@@ -17,6 +17,9 @@ steps:
 
   - name: deploy
     commands:
+      - cd application
+      - docker compose stop
+      - cd ..
       - sudo rm -rf application
       - sudo git clone https://github.com/CHunYenc/crypto-price-scheduler.git application
       - sudo cd application
