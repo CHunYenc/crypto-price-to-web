@@ -38,3 +38,7 @@ steps:
       - docker compose rm -f
       - docker image prune -a
       - docker compose up -d
+
+depends_on:
+  - ready
+  - production
