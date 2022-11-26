@@ -1,6 +1,21 @@
+kind: pipline
+type: docker
+name: ready
+
+steps:
+  - name: setup
+    image: python:3.7-slim
+    commands:
+      - pip install --upgrade pip
+      - pip install -r backend/requirements.txt
+  
+  # - name: test
+    # image: python
+
+---
 kind: pipeline
 type: ssh
-name: default
+name: production
 
 server:
   host:
@@ -10,51 +25,15 @@ server:
   ssh_key:
     from_secret: key
 
-
-
 steps:
-  - name: setup
+  - name: deploy
     commands:
-      - sudo su
-      - python3 -m venv .env
-      - source .env/bin/activate
-      - pip install -U pip
-      - pip install -r requirements.txt
-
-
-# steps:
-#   - name: setup
-#     image: python:3.7-slim
-#     commands:
-#       - pip install --upgrade pip
-#       - pip install -r backend/requirements.txt
-
-#   - name: ssh
-#     image: appleboy/drone-ssh
-#     # environment:
-#     #   PLUGIN_ENVS: SECRET_KEY, REDIS_HOST, REDIS_PORT
-#     #   SECRET_KEY:
-#     #     from_secret: SECRET_KEY
-#     #   REDIS_HOST:
-#     #     from_secret: REDIS_HOST
-#     #   REDIS_PORT:
-#     #     from_secret: REDIS_PORT
-#     settings:
-#       host:
-#         from_secret: ssh_host
-#       username:
-#         from_secret: ssh_username
-#       key:
-#         from_secret: ssh_key
-#       command_timeout: 10m
-#       script:
-#         - echo "HelloWorld!"
-#         # - rm -rf application
-#         # - git clone https://github.com/CHunYenc/crypto-price-scheduler.git application
-#         # - cd application
-#         # - echo SECRET_KEY = $${SECRET_KEY} > backend/.env
-#         # - echo REDIS_HOST = $${REDIS_HOST} >> backend/.env
-#         # - echo REDIS_PORT = $${REDIS_PORT} >> backend/.env
-#         # - docker compose rm -f
-#         # - docker image prune -a
-#         # - docker compose up -d
+      - rm -rf application
+      - git clone https://github.com/CHunYenc/crypto-price-scheduler.git application
+      - cd application
+      - echo SECRET_KEY = $${SECRET_KEY} > backend/.env
+      - echo REDIS_HOST = $${REDIS_HOST} >> backend/.env
+      - echo REDIS_PORT = $${REDIS_PORT} >> backend/.env
+      - docker compose rm -f
+      - docker image prune -a
+      - docker compose up -d
