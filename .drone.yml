@@ -11,13 +11,13 @@ server:
     from_secret: key
 
 steps:
-  - name: build
-    commands:
-      - sudo docker compose build
+#   - name: build
+#     commands:
+#       - sudo docker compose build
 
   - name: deploy
     commands:
-      - cd application
+      - cd /home/ubuntu/application
       - docker compose stop
       - cd ..
       - sudo rm -rf application
