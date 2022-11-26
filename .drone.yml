@@ -28,6 +28,7 @@ server:
 steps:
   - name: deploy
     commands:
+      - sudo su
       - rm -rf application
       - git clone https://github.com/CHunYenc/crypto-price-scheduler.git application
       - cd application
