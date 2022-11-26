@@ -1,21 +1,6 @@
-kind: pipline
-type: docker
-name: ready
-
-steps:
-  - name: setup
-    image: python:3.7-slim
-    commands:
-      - pip install --upgrade pip
-      - pip install -r backend/requirements.txt
-  
-  # - name: test
-    # image: python
-
----
 kind: pipeline
 type: ssh
-name: production
+name: default
 
 server:
   host:
@@ -26,18 +11,21 @@ server:
     from_secret: key
 
 steps:
+  - name: build
+    commands:
+      - sudo docker compose build
+
   - name: deploy
     commands:
-      - sudo su
-      - rm -rf application
-      - git clone https://github.com/CHunYenc/crypto-price-scheduler.git application
-      - cd application
-      - echo SECRET_KEY = $${SECRET_KEY} > backend/.env
-      - echo REDIS_HOST = $${REDIS_HOST} >> backend/.env
-      - echo REDIS_PORT = $${REDIS_PORT} >> backend/.env
-      - docker compose rm -f
-      - docker image prune -a
-      - docker compose up -d
+      - sudo rm -rf application
+      - sudo git clone https://github.com/CHunYenc/crypto-price-scheduler.git application
+      - sudo cd application
+      - sudo echo SECRET_KEY = $${SECRET_KEY} > backend/.env
+      - sudo echo REDIS_HOST = $${REDIS_HOST} >> backend/.env
+      - sudo echo REDIS_PORT = $${REDIS_PORT} >> backend/.env
+      - sudo docker compose rm -f
+      - sudo docker image prune -a
+      - sudo docker compose up -d
 
 depends_on:
   - ready
