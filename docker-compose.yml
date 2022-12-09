@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+  redis:
+    build: ./conf
+    container_name: crypto-schedule-redis
+    restart: always
+    expose:
+      - 6379
+
+  backend:
+    build: ./backend
+    container_name: crypto-schedule-backend
+    restart: always
+    expose:
+      - 8080
+    volumes:
+      - ./backend:/app
+      - ./logs/backend/:/app/logs/
+    depends_on:
+      - redis
+
+  celery-worker:
+    build: ./backend
+    command: celery -A celery_worker.celery worker -P eventlet -c 1000 --loglevel=info
+    volumes:
+      - ./backend:/app
+    links:
+      - redis
+    depends_on:
+      - redis
+      - backend
+    
+  celery-beat:
+    build: ./backend
+    command: celery -A celery_worker.celery beat -l info
+    volumes:
+      - ./backend:/app
+    links:
+      - redis
+    depends_on:
+      - redis
+      - celery-worker
+
+  nginx:
+    image: nginx:1.23
+    container_name: crypto-schedule-nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./logs/nginx/:/var/log/nginx/
+      - ./conf/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./conf/proxy_params:/etc/nginx/proxy_params
+    links:
+      - backend
+    depends_on:
+      - backend
