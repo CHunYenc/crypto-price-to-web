@@ -12,6 +12,12 @@ services:
     build: ./backend
     container_name: crypto-schedule-backend
     restart: always
+    environment:
+      - HOST=${HOST}
+      - PORT=${PORT}
+      - REDIS_URL=${REDIS_URL}
+      - SECRET_KEY=${SECRET_KEY}
+      # - PIDFILE=${PIDFILE} # default run.pid
     expose:
       - 8080
     volumes:
@@ -19,28 +25,6 @@ services:
       - ./logs/backend/:/app/logs/
     depends_on:
       - redis
-
-  celery-worker:
-    build: ./backend
-    command: celery -A celery_worker.celery worker -P eventlet -c 1000 --loglevel=info
-    volumes:
-      - ./backend:/app
-    links:
-      - redis
-    depends_on:
-      - redis
-      - backend
-    
-  celery-beat:
-    build: ./backend
-    command: celery -A celery_worker.celery beat -l info
-    volumes:
-      - ./backend:/app
-    links:
-      - redis
-    depends_on:
-      - redis
-      - celery-worker
 
   nginx:
     image: nginx:1.23
