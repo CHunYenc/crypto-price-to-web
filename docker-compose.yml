@@ -22,7 +22,7 @@ services:
       - 8080
     volumes:
       - ./backend:/app
-      - ./logs/backend/:/app/logs/
+      - ./logs/backend:/app/app/logs
     depends_on:
       - redis
 
